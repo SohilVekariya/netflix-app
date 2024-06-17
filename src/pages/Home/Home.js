@@ -9,26 +9,25 @@ import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
 import { useState } from "react";
 
-function Home() {
-  const [selectedImage, setSelectedImage] = useState(hero_banner); // Initially set to hero_banner
 
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
+function Home() {
+  const [selectedImage, setSelectedImage] = useState([hero_banner,hero_title,"Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, officiis?"]); // Initially set to hero_banner and hero_title
+
+  const handleImageClick = (image,title_img,title_name) => {
+    setSelectedImage([image,title_img,title_name]);
   };
+  
 
   
   return (
     <div className="home">
       <Navbar />
       <div className="hero">
-        <img src={selectedImage} alt="" className="banner-img" />
+        <img src={selectedImage[0]} alt="" className="banner-img" />
         <div className="hero-caption">
-          <img src={hero_title} alt="" className="caption-img" />
+          <img src={selectedImage[1]} alt="" className="caption-img" />
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem,
-            assumenda ab atque perferendis quaerat ipsa minus dolore deserunt
-            fugiat. Placeat ea consequatur hic illo voluptates facere recusandae
-            illum reiciendis similique?
+            {selectedImage[2]}
           </p>
           <div className="hero-btns">
             <button className="btn">

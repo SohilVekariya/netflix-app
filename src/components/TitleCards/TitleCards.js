@@ -1,19 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./TitleCards.css";
 import cards_data from "../../assets/cards/Cards_data";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const TitleCards = ({ title, category, onImageClick }) => {
-  // const [apiData, setApiData] = useState([]);
+ 
   const cardsRef = useRef();
-
-  // const options = {
-  //   method: "GET",
-  //   headers: {
-  //     accept: "application/json",
-  //     Authorization:
-  //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjZjg2NWM4YjE0MjE2ZTZiY2NiMTMzN2E2ZTM3NjZiZCIsInN1YiI6IjY0ZDhiM2E5MDAxYmJkMDEwMDVjZTQyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Adba-ZfThjFlRcGdtsyjY_6m6dzLeJuMRFY-PzVj5nc",
-  //   },
-  // };
 
   const handleWheel = (event) => {
     event.preventDefault();
@@ -21,33 +14,69 @@ const TitleCards = ({ title, category, onImageClick }) => {
   };
 
   useEffect(() => {
-    // fetch(
-    //   `https://api.themoviedb.org/3/movie/${category?category:"now_playing"}?language=en-US&page=1`,
-    //   options
-    // )
-    //   .then((response) => response.json())
-    //   .then((response) => setApiData(response.results))
-    //   .catch((err) => console.error(err));
-
     cardsRef.current.addEventListener("wheel", handleWheel);
   }, []);
 
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [show, setShow] = useState(false);
+
+  const onImageHover = (image, title, name) => {
+    setSelectedCard({ image, title, name });
+    setShow(true)
+  };
+
+  const closeModal = () => {
+    setSelectedCard(null);
+    setShow(false);
+  };
+
+
   return (
-    <div className="title-cards">
+    <div className="title-cards" >
       <h2>{title ? title : "Popular on Netflix"}</h2>
-      <div className="card-list" ref={cardsRef}>
-        {/* {apiData.map((card, index) => { */}
+      <div className="card-list" ref={cardsRef} >
+       
         {cards_data.map((card, index) => {
           return (
-            <div className="card" key={index}>
-              {/* <img src={'https://image.tmdb.org/t/p/w500/'+card.backdrop_path} alt="" onClick={() => onImageClick(`https://image.tmdb.org/t/p/w500/${card.backdrop_path}`)}/>
-              <p>{card.original_title}</p> */}
-              <img src={card.image} alt="" onClick={() => onImageClick(`${card.image}`)}/>
+            <div className="card" key={index} >
+              
+              <img
+                src={card.image}
+                alt=""
+                onClick={() =>
+                  onImageClick(`${card.image}`, card.title, card.name)
+                }
+                onMouseEnter={() => onImageHover(card.image, card.title, card.name)}
+              />
               <p>{card.name}</p>
             </div>
           );
         })}
       </div>
+      {/* Modal/Popup for showing card details */}
+      {selectedCard && (
+        <Modal
+        show={show}
+        onHide={closeModal}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modal title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          I will not close if you click outside me. Do not even try to press
+          escape key.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Close
+          </Button>
+          <Button variant="primary">Understood</Button>
+        </Modal.Footer>
+      </Modal>
+        
+      )}
     </div>
   );
 };
