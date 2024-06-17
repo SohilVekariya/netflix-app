@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./TitleCards.css";
 import cards_data from "../../assets/cards/Cards_data";
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import Modal from "react-bootstrap/Modal";
+import { Button } from "react-bootstrap";
+import "./TitleCards.css";
 
 const TitleCards = ({ title, category, onImageClick }) => {
- 
   const cardsRef = useRef();
 
   const handleWheel = (event) => {
@@ -20,9 +19,9 @@ const TitleCards = ({ title, category, onImageClick }) => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [show, setShow] = useState(false);
 
-  const onImageHover = (image, title, name) => {
-    setSelectedCard({ image, title, name });
-    setShow(true)
+  const onImageHover = (image, title, name, video) => {
+    setSelectedCard({ image, title, name, video });
+    setShow(true);
   };
 
   const closeModal = () => {
@@ -30,23 +29,27 @@ const TitleCards = ({ title, category, onImageClick }) => {
     setShow(false);
   };
 
-
   return (
-    <div className="title-cards" >
+    <div className="title-cards1">
       <h2>{title ? title : "Popular on Netflix"}</h2>
-      <div className="card-list" ref={cardsRef} >
-       
+      <div className="card-list1" ref={cardsRef}>
         {cards_data.map((card, index) => {
           return (
-            <div className="card" key={index} >
-              
+            <div className="card1" key={index}>
               <img
                 src={card.image}
                 alt=""
                 onClick={() =>
-                  onImageClick(`${card.image}`, card.title, card.name)
+                  onImageClick(
+                    `${card.image}`,
+                    card.title,
+                    card.name,
+                    card.video
+                  )
                 }
-                onMouseEnter={() => onImageHover(card.image, card.title, card.name)}
+                onMouseEnter={() =>
+                  onImageHover(card.image, card.title, card.name, card.video)
+                }
               />
               <p>{card.name}</p>
             </div>
@@ -54,28 +57,43 @@ const TitleCards = ({ title, category, onImageClick }) => {
         })}
       </div>
       {/* Modal/Popup for showing card details */}
-      {selectedCard && (
+      {selectedCard !== null ? (
         <Modal
-        show={show}
-        onHide={closeModal}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Do not even try to press
-          escape key.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            Close
-          </Button>
-          <Button variant="primary">Understood</Button>
-        </Modal.Footer>
-      </Modal>
-        
+          show={show}
+          onHide={closeModal}
+          backdrop="static"
+          keyboard={false}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className="modal-content1"
+          contentClassName="custom-modal-content"
+        >
+          <Modal.Body className="p-0 position-relative popup-modal-body">
+            <div className="">
+              <Button
+                variant="secondary"
+                onClick={closeModal}
+                className="position-absolute end-0 btn-close btn-close-white z-1"
+              ></Button>
+            </div>
+            <div className="position-relative w-100 h-100 bg-secondary">
+              {/* <img
+                src={selectedCard.image}
+                alt=""
+                className="w-100 h-100 object-fit-cover popup-banner rounded object-fit-cover"
+              /> */}
+              <video
+                controls
+                className="position-absolute top-0 start-0 w-100 h-50 object-fit-cover"
+              >
+                <source src={selectedCard.video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </Modal.Body>
+        </Modal>
+      ) : (
+        <></>
       )}
     </div>
   );
