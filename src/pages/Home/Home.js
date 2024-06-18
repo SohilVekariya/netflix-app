@@ -43,6 +43,7 @@ function Home() {
         </div>
       </div>
       <div className="more-cards">
+        <TitleCards title={"Recently Watched"} category={"top_rated"} onImageClick={handleImageClick}/>
         <TitleCards title={"Blockbuster Movies"} category={"top_rated"} onImageClick={handleImageClick}/>
         <TitleCards title={"Only on Netflix"} category={"popular"} onImageClick={handleImageClick}/>
         <TitleCards title={"Upcoming"} category={"upcoming"} onImageClick={handleImageClick}/>

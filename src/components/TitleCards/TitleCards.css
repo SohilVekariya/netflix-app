@@ -27,6 +27,11 @@
     position: relative;
 }
 
+.card-list1 .card1:hover {
+    position: relative;
+    border: 1px solid white;
+}
+
 .card-list1 .card1 p{
     position: absolute;
     bottom: 10px;
@@ -34,8 +39,19 @@
 }
 
 .custom-modal-content{
-    width: 1000px;
-    height: 600px;
+    max-width: 60%;
+    border-radius:  25px;
+}
+
+.model-video-content{
+    background-color: #181818;
+}
+
+.moviedetails{
+    color: #717171;
+}
+.green-span-content{
+    color:#3DAF59;
 }
 /* .modal-content1{
     width: 1000px;
