@@ -4,41 +4,36 @@ import { Modal, Button } from "react-bootstrap";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { GoMute, GoUnmute } from "react-icons/go";
 import { SlLike } from "react-icons/sl";
+import { BiSolidLike } from "react-icons/bi";
 import { IoMdCheckmark } from "react-icons/io";
 
-const VideoModal = ({ show, handleClose, selectedCard, onRecent }) => {
+const VideoModal = ({
+  show,
+  handleClose,
+  selectedCard,
+  handleLikeId,
+  likedMovieIds,
+  handleWatchId,
+  watchedMovieIds
+}) => {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
   const [icon, setIcon] = useState(true);
   const [playing, setPlaying] = useState(true);
-  const [recentlyWatched, setRecentlyWatched] = useState([]);
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.addEventListener("play", handlePlay);
-    }
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.removeEventListener("play", handlePlay);
-      }
-    };
-  }, [selectedCard]);
-
-  const handlePlay = () => {
-    const videoData = {
-      src: videoRef.current.src,
-      title: selectedCard.name,
-      currentTime: videoRef.current.currentTime,
-    };
-    setRecentlyWatched([videoData, ...recentlyWatched]);
+  const handleToggleLike = () => {
+    handleLikeId(selectedCard.id);
   };
+
+  const handleToggleWatch = () => {
+    handleWatchId(selectedCard.id);
+  }
 
   const handleTogglePlay = () => {
     if (videoRef.current) {
       if (videoRef.current.paused) {
         videoRef.current.play();
         setPlaying(true);
-        onRecent(recentlyWatched);
       } else {
         videoRef.current.pause();
         setPlaying(false);
@@ -95,13 +90,24 @@ const VideoModal = ({ show, handleClose, selectedCard, onRecent }) => {
                 </button>
               </div>
               <div>
-                <button className="rounded-pill fs-5 px-2 py-1 text-white bg-transparent border-white">
-                  <SlLike />
+                <button
+                  className="rounded-pill fs-5 px-2 py-1 text-white bg-transparent border-white"
+                  onClick={handleToggleLike}
+                >
+                  {likedMovieIds.includes(selectedCard.id) ? (
+                    <BiSolidLike />
+                  ) : (
+                    <SlLike />
+                  )}
                 </button>
               </div>
               <div>
-                <button className="rounded-pill fs-5 px-2 py-1 text-white bg-transparent border-white">
-                  <IoMdCheckmark />
+                <button className="rounded-pill fs-5 px-2 py-1  bg-transparent border-white" onClick={handleToggleWatch}>
+                  {watchedMovieIds.includes(selectedCard.id) ? (
+                  <IoMdCheckmark className="text-white"/>
+                  ) : (
+                  <IoMdCheckmark className=""/>
+                  )}
                 </button>
               </div>
             </div>
@@ -124,11 +130,11 @@ const VideoModal = ({ show, handleClose, selectedCard, onRecent }) => {
                 <p>
                   <span className="green-span-content">92 % Match</span> 2021
                   &nbsp;{" "}
-                  <span className="btn text-white border-white py-0 px-1 bg-transparent rounded">
+                  <span className="btn cursor-text text-white border-white py-0 px-1 bg-transparent rounded">
                     12+
                   </span>{" "}
                   &nbsp; 2 &nbsp;
-                  <span className="btn text-white border-white py-0 px-1 bg-transparent rounded">
+                  <span className="btn cursor-text text-white border-white py-0 px-1 bg-transparent rounded">
                     HD
                   </span>
                 </p>
@@ -150,11 +156,11 @@ const VideoModal = ({ show, handleClose, selectedCard, onRecent }) => {
                   Sy,Ludivine Sagnier,Clotilde Hesme, mehr
                 </p>
                 <p>
-                  <span className="moviedetails">Genres:</span> Krimiserien,
+                  <span className="moviedetails">Genres:</span>Krimiserien,
                   Franzosisch, Serien nach Buchvorlage
                 </p>
                 <p>
-                  <span className="moviedetails">Diese Serie ist:</span>{" "}
+                  <span className="moviedetails">Diese Serie ist: </span>
                   Aufregend
                 </p>
               </div>
